@@ -1,0 +1,179 @@
+/* Center the form horizontally and vertically */
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+	margin: 0;
+    background-color: #f7f7f7; /* Slightly clearer background color */
+    font-family: 'Arial', sans-serif; /* Background color for the entire page */
+}
+
+/* Style the form container */
+.form-container {
+    background-color: #fff; /* White background color for the form */
+    border: 2px solid #1e409f; /* Border color and thickness */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px; /* Add some padding inside the border */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Box shadow for a slight elevation effect */
+    text-align: center; /* Center the contents */
+}
+
+/* Style the login title */
+h1 {
+    font-size: 24px; /* Font size for the title */
+    color: #1e409f; /* Dark blue color for the title */
+}
+
+/* Style the form inputs and button */
+input[type="text"], input[type="password"], button {
+	max-width: 250px; /* Limit the width of the input fields */
+    width: 100%; /* Make inputs and button full width */
+    padding: 10px; /* Add padding to inputs and button */
+    margin-bottom: 10px; /* Add spacing between elements */
+    border: 1px solid #ccc; /* Add a light border */
+    border-radius: 5px; /* Add rounded corners */
+	margin: 0 auto; /* Center the input fields horizontally */
+}
+
+button {
+    background-color: #1e409f; /* Dark blue background color for the button */
+    color: #fff; /* White text color for the button */
+    cursor: pointer; /* Add pointer cursor for the button */
+    transition: background-color 0.3s; /* Smooth background color transition */
+}
+
+button:hover {
+    background-color: #0d2757; /* Darker blue on hover */
+}
+
+/* Style the conversation container */
+.conversation-container {
+    display: flex;
+    flex-direction: column; /* Stack widgets vertically */
+    align-items: center; /* Center widgets horizontally */
+}
+
+/* Style the conversation widgets */
+.conversation-widget {
+    background-color: white;
+    border: 1px solid #000; /* Thin black border */
+    border-radius: 10px; /* Rounded corners */
+    padding: 10px;
+    margin-bottom: 10px;
+	max-width: 1200px;
+	width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Style the conversation name */
+.conversation-name {
+    font-weight: bold;
+    font-family: 'Arial', sans-serif;
+    color: #1e409f; /* Dark blue color */
+}
+
+/* Style the time of last message */
+.last-message-time {
+    background-color: #00c100;/*#ff8c00;*/ /* Dark orange background color */
+    padding: 5px;
+    border-radius: 5px;
+    color: #fff; /* White text color */
+}
+
+/* Style the toggle container */
+.toggle-container {
+    /*text-align: center;*/
+    margin-top: 20px; /* Adjust the margin as needed */
+    margin-bottom: 20px; /* Adjust the bottom margin to control spacing */
+	border: 1px solid #000;
+	max-width: 300px;
+	background-color: white;
+	width: 100%;
+	border-radius: 40px;
+    /*display: flex;*/
+    /*justify-content: space-between;*/
+	/*padding: 10px;*/
+    /*align-items: center;*/
+}
+
+/* Style for the toggle widget */
+.toggle-widget {
+    background-color: white;
+    border-radius: 40px; /* Round left and right sides */
+    display: flex; /* inline-block; */
+    padding: 10px; /* Adjust padding as needed */
+	/*display: flex;*/
+	justify-content: space-between;
+	/*padding-bottom: 20px;*/
+	/*align-items: center;*/
+}
+
+/* Style for the toggle button */
+.toggle-button {
+    width: 80px;
+    height: 40px;
+    background-color: gray; /* Gray when off */
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+/* Style for the active state of the toggle button */
+.toggle-button.active {
+    background-color: green; /* Green when on */
+}
+
+/* Style the toggle circle inside the button */
+.toggle-circle {
+    width: 36px; /* Diameter of the circle */
+    height: 36px;
+    background-color: white;
+    border-radius: 50%; /* Make it a circle */
+    margin-left: 4px; /* Creates a slight offset to show on/off state */
+}
+
+/* Style the toggle text */
+.toggle-text {
+    font-weight: bold;
+    font-family: 'Arial', sans-serif;
+    color: #1e409f; /* Dark blue color */
+    margin-top: 10px; /* Adjust the margin as needed */
+	font-size: 22px;
+}
+
+/* Style for the active state of the toggle button */
+.toggle-active .toggle-circle {
+    margin-left: 40px; /* Adjust the margin to shift the circle to the right */
+}
+
+/* Styles for the chatbot message container */
+.chatbot-message-container {
+    padding: 10px; /* Add padding around the chatbot message */
+    display: flex;
+    flex-direction: column; /* Stack chatbot message on top of conversations */
+    align-items: center; /* Center content horizontally */
+}
+
+/* Styles for the chatbot message */
+#chatbot-message {
+    /*padding: 10px;*/
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 10px;
+    color: #f7f7f7; /* Set the initial color to match the background */
+}
+
+/* Additional styles for hiding the chatbot message initially */
+.hidden {
+    display: none;
+}
+
+
+
+
+
+

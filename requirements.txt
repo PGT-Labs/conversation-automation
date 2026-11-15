@@ -1,0 +1,4 @@
+Flask==2.2.5
+Selenium==3.141.0
+chromedriver-autoinstaller==0.2.2
+webdriver-manager==4.0.1

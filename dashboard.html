@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link rel="stylesheet" href="/static/style.css"> <!-- Link to your CSS file -->
+</head>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+	// Function to toggle the chatbot and update the text
+	function toggleChatbot() {
+		const toggleButton = document.querySelector('.toggle-button');
+		const toggleText = document.querySelector('.toggle-text');
+		const chatbotMessage = document.getElementById('chatbot-message');
+		toggleButton.classList.toggle('toggle-active');
+		const chatbotActive = toggleButton.classList.contains('toggle-active');
+		localStorage.setItem('chatbotActive', chatbotActive);
+		// Update the text based on the state
+		if (chatbotActive) {
+			toggleText.textContent = 'Chatbot Active';
+			chatbotMessage.style.color = '#000000';
+		} else {
+			toggleText.textContent = 'Activate Chatbot';
+			chatbotMessage.style.color = '#f7f7f7';
+		}
+		/*if (toggleButton.classList.contains('toggle-active')) {
+			toggleText.textContent = 'Chatbot Active';
+			//chatbotMessage.style.display = 'block'; // Show the message
+			chatbotMessage.style.color = '#000000'; // Change color to black
+		} else {
+			toggleText.textContent = 'Activate Chatbot';
+			//chatbotMessage.style.display = 'none'; // Hide the message
+			chatbotMessage.style.color = '#f7f7f7'; // Change color to grey
+		}*/
+		var session_id = document.getElementById('session_id').textContent;
+		fetch(`/toggle?session_id=${session_id}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		console.log("toggle clicked");
+	}
+</script>
+
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		const toggleButton = document.querySelector('.toggle-button');
+		const toggleText = document.querySelector('.toggle-text');
+		const chatbotMessage = document.getElementById('chatbot-message');
+		
+		// Retrieve the chatbot state from localStorage
+		/*const chatbotActive = localStorage.getItem('chatbotActive') === 'true';*/
+		// Access the chatbot_active variable passed from Flask
+		var chatbotActive = {{ chatbot_active|tojson|safe }};
+		
+		// Set the button's class and text based on the state
+		if (chatbotActive) {
+			toggleButton.classList.add('toggle-active');
+			toggleText.textContent = 'Chatbot Active';
+			chatbotMessage.style.color = '#000000';
+		} else {
+			toggleText.textContent = 'Activate Chatbot';
+			chatbotMessage.style.color = '#f7f7f7';
+		}
+	});
+</script>
+
+<script>
+    // Function to run dashboard periodically
+    function runDashboard() {
+		var session_id = document.getElementById('session_id').textContent;
+        fetch(`/running?session_id=${session_id}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+            .then(response => response.json())
+            .then(data => {
+			if (!data.dashboard_running) {
+				location.reload();
+			}
+		});
+    }
+
+    // Schedule the refresh to occur every 5 minutes (300,000 milliseconds) - or 5 seconds in production
+    setInterval(runDashboard, 30000);/*120*/
+</script>
+
+<!--<script>
+    // Function to check if the dashboard route is running
+    function checkRunning() {
+        fetch(`/running?session_id=${session_id}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})	
+			.then({
+			console.log("check if dashboard running");
+		});
+    }
+
+    // Schedule the refresh to occur every 15 seconds
+    setInterval(checkRunning, 15000);/*120*/
+</script>-->
+
+<script>
+    function refreshPage() {
+		var session_id = document.getElementById('session_id').textContent;
+        // Make an AJAX request to get updated conversations
+        fetch(`/get_conversations?session_id=${session_id}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+            .then(response => response.json())
+            .then(data => {
+                conversations = data;
+				console.log(conversations);
+            })
+            .catch(error => {
+                console.error('Error fetching updated conversations:', error);
+            });
+    }
+
+    // Call the refreshPage function every 15 seconds
+    //setInterval(refreshPage, 15000);
+</script>
+
+<!--<script>
+    function testSession() {
+        $.get('/session', function(data) {
+			console.log("test session data");
+        });
+    }
+
+    setInterval(testSession, 10000);
+</script>-->
+
+<script>
+    function updateBotHandled(checkbox) {
+        const conversationUrl = checkbox.value;
+        const botHandled = checkbox.checked ? 2 : 1; // Toggle between 1 and 2
+		var session_id = document.getElementById('session_id').textContent;
+        
+        // Send a request to update botHandled
+        fetch(`/update_bot_handled?linkUrl=${conversationUrl}&botHandled=${botHandled}&session_id=${session_id}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+			.then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                // Optionally, you can update the UI here if needed.
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+                // Handle the error if necessary.
+            });
+    }
+</script>
+
+
+<body>
+	<div id="session_id" style="display: none;">{{ session_id }}</div>
+
+	<div id="conversation-container" class="conversation-container">
+		<!-- Toggle widget container -->
+		<div class="toggle-container">
+			<div class="toggle-widget">
+				<!-- Toggle button -->
+				<div class="toggle-button" onclick="toggleChatbot()">
+					<div class="toggle-circle"></div>
+					<!--<a href="#" id="ajax-toggle-button" style="display: none;"></a>-->
+				</div>
+				<!-- Toggle text -->
+				<div class="toggle-text">{{ chatbot_text }}</div>
+			</div>
+		</div>
+		
+		<div class="chatbot-message-container">
+			<div id="chatbot-message" style="text-align: center;">
+				Chatbot is now active <br> 
+				It will handle newly opened conversations
+			</div>
+		</div>
+	
+        {% for linkUrl in conversations|reverse %}
+			<div class="conversation-widget">
+				<!--<div class="bot-handled-checkbox">
+					<input type="checkbox" id="botHandled_{{ loop.index }}" name="botHandled_{{ loop.index }}" {% if conversations[linkUrl][4] %}checked{% endif %}>
+				</div>-->				
+				
+				{% if conversations[linkUrl][4] == 1 %}
+					<!-- Render the checkbox for handlable conversations -->
+					<input type="checkbox" name="botHandled" value="{{ linkUrl }}"
+						   onchange="updateBotHandled(this)">
+				{% elif conversations[linkUrl][4] == 2 %}
+					<!-- Render the checkbox as checked for bot-handled conversations -->
+					<input type="checkbox" name="botHandled" value="{{ linkUrl }}"
+						   onchange="updateBotHandled(this)" checked>
+				{% endif %}				
+				
+				<div class="conversation-name">{{ conversations[linkUrl][0] }}</div>
+				<div class="last-message-time" style="background-color: {% if conversations[linkUrl][4] %}#00c100{% else %}#ff8c00{% endif %};">
+					{{ conversations[linkUrl][1] }}
+				</div>
+									
+			</div>
+        {% endfor %}
+		</div>
+	</div>
+</body>
+</html>
